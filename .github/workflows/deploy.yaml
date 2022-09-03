@@ -1,0 +1,75 @@
+name: build-deploy
+
+on: 
+  push: 
+      branches:
+      - master
+
+jobs:
+  build:
+    name: build-image
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v1
+      - name: docker-action
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          registry: ${{ secrets.DOCKER_REGISTRY }}
+          repository: "${{ github.repository }}"
+          tags: "${{ github.sha }}"
+      - name: feishu-bot-message
+        if: always()
+        uses: foxundermoon/feishu-action@v2
+        with:
+          url: ${{ secrets.FEISHU_BOT_WEBHOOK_URL }}
+          msg_type: text
+          content: |
+            text: |
+              🔨 构建状态 - From Github Action 
+              
+              repository: https://github.com/${{ github.repository }}
+
+              committer: https://github.com/${{ github.actor }}
+              
+              compare: ${{ github.event.compare }}
+
+              job status: ${{ job.status }}
+
+  deploy:
+    needs: build
+    name: k8s-deploy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: set-deployment-config
+        run: |
+          XIMAGE="${{ secrets.DOCKER_REGISTRY }}/${{ github.repository }}:${{ github.sha }}"
+          sed -i "s#HAPPYIMAGE#$XIMAGE#g" ./chart/config.yaml
+          sed -i "s#HAPPYREPO#${{ github.event.repository.name }}#g" ./chart/config.yaml
+          sed -i "s#BOT_API#${{ secrets.BOT_API }}#g" ./chart/config.yaml
+
+      - name: k3s-apply-deployment
+        uses: steebchen/kubectl@v2.0.0
+        with:
+          config: ${{ secrets.KUBE_CONFIG_DATA }}
+          command: apply -f ./chart/config.yaml
+      - name: feishu-bot-message
+        if: always()
+        uses: foxundermoon/feishu-action@v2
+        with:
+          url: ${{ secrets.FEISHU_BOT_WEBHOOK_URL }}
+          msg_type: text
+          content: |
+            text: |
+              ⭕️ 部署状态 - From Github Action 
+              
+              repository: https://github.com/${{ github.repository }}
+
+              committer: https://github.com/${{ github.actor }}
+              
+              compare: ${{ github.event.compare }}
+
+              job status: ${{ job.status }}

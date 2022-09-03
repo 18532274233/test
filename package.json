@@ -1,0 +1,60 @@
+{
+    "name": "vue3-ts-happysooner-web",
+    "version": "0.0.0",
+    "license": "MIT",
+    "author": {
+        "name": "unliar",
+        "email": "370732889@qq.com",
+        "url": "https://happysooner.com/about"
+    },
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "serve": "vite preview",
+        "lint": "pretty-quick --staged",
+        "wlint": "prettier --write ./src",
+        "postinstall": "husky install",
+        "test": "jest --coverage"
+    },
+    "dependencies": {
+        "@geist-ui/themes": "^1.0.1",
+        "@geist-ui/typography": "^1.0.1",
+        "@vueuse/head": "^0.2.3",
+        "axios": "^0.21.1",
+        "dayjs": "^1.10.4",
+        "highlight.js": "^10.6.0",
+        "js-cookie": "^2.2.1",
+        "markdown-it": "^12.0.4",
+        "nprogress": "^0.2.0",
+        "pinia": "^2.0.0-rc.9",
+        "vue": "^3.2.0",
+        "vue-global-api": "^0.2.1",
+        "vue-router": "^4.0.3",
+        "vue-toastification": "^2.0.0-rc.1",
+        "vuex": "^4.0.0"
+    },
+    "devDependencies": {
+        "@babel/preset-env": "^7.9.0",
+        "@commitlint/cli": "^11.0.0",
+        "@commitlint/config-conventional": "^11.0.0",
+        "@types/jest": "^25.2.3",
+        "@types/js-cookie": "^2.2.6",
+        "@types/markdown-it": "^12.0.1",
+        "@types/node": "^14.14.31",
+        "@types/nprogress": "^0.2.0",
+        "@vitejs/plugin-vue": "^1.1.4",
+        "@vitejs/plugin-vue-jsx": "^1.1.0",
+        "@vitejs/plugin-legacy": "^1.3.1",
+        "@vue/compiler-sfc": "^3.0.5",
+        "@vue/test-utils": "^2.0.0-rc.1",
+        "@vuedx/typecheck": "^0.6.0",
+        "@vuedx/typescript-plugin-vue": "^0.6.0",
+        "husky": "^5.0.9",
+        "jest": "^25.2.7",
+        "prettier": "2.2.1",
+        "pretty-quick": "^3.1.0",
+        "typescript": "^4.1.3",
+        "vite": "^2.0.0",
+        "vue-jest": "^5.0.0-alpha.7"
+    }
+}
